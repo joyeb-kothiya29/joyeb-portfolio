@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="mt-16 border-t border-border pt-16 md:mt-20 md:pt-20"
+      className="mt-8 border-t border-border pt-10 md:pt-12"
     >
       <div className="space-y-8">
         <div className="space-y-2 text-center">

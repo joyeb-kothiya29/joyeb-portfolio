@@ -27,7 +27,7 @@ export default function BlogScroll({ posts }: { posts: BlogPostPreview[] }) {
       ref={containerRef}
       id="blogs"
       style={{ height: `${100 + posts.length * 40}vh` }}
-      className="relative mt-8"
+      className="relative mt-2"
     >
       <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-linear-to-l from-background to-transparent" />

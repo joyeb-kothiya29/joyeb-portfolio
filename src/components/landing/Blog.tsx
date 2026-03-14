@@ -8,7 +8,7 @@ export default function Blog() {
 
   return (
     <>
-      <div className="mt-16 md:mt-20">
+      <div className="mt-16 md:mt-20 mb-0">
         <SectionHeading subHeading="Featured" heading="Blogs" />
       </div>
       <BlogScroll posts={posts} />
