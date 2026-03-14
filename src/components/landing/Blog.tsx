@@ -6,10 +6,9 @@ import { animate, motion, useMotionValue } from 'motion/react';
 import { Link } from 'next-view-transitions';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const CARD_WIDTH = 340;
+const DESKTOP_CARD_WIDTH = 340;
 const MOBILE_CARD_WIDTH = 260;
 const GAP = 24;
-const FRAME_PADDING = 24;
 const SPRING_CONFIG = {
   type: 'spring' as const,
   stiffness: 300,
@@ -71,26 +70,35 @@ export default function Blog({ posts }: BlogProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [frameWidth, setFrameWidth] = useState(800);
-  const [cardWidth, setCardWidth] = useState(CARD_WIDTH);
+  const [cardWidth, setCardWidth] = useState(DESKTOP_CARD_WIDTH);
   const x = useMotionValue(0);
 
   const safePosts = posts ?? [];
   const totalPosts = safePosts.length;
-  const step = cardWidth + GAP;
-  const innerFrameWidth = Math.max(frameWidth - FRAME_PADDING * 2, 0);
+  const STEP = cardWidth + GAP;
   const atStart = currentIndex === 0;
   const atEnd = currentIndex === totalPosts - 1;
 
   const getCenteredX = useCallback(
-    (index: number) => -(index * step) + (innerFrameWidth / 2 - cardWidth / 2),
-    [step, innerFrameWidth, cardWidth],
+    (index: number) => -(index * STEP) + (frameWidth / 2 - cardWidth / 2),
+    [STEP, frameWidth, cardWidth],
+  );
+
+  const clampX = useCallback(
+    (value: number) => {
+      if (totalPosts <= 1) return getCenteredX(0);
+      const maxX = getCenteredX(0);
+      const minX = getCenteredX(totalPosts - 1);
+      return Math.max(minX, Math.min(maxX, value));
+    },
+    [getCenteredX, totalPosts],
   );
 
   useEffect(() => {
     const updateMeasurements = () => {
       const measuredWidth = frameRef.current?.offsetWidth ?? 800;
       setFrameWidth(measuredWidth);
-      setCardWidth(window.innerWidth < 640 ? MOBILE_CARD_WIDTH : CARD_WIDTH);
+      setCardWidth(window.innerWidth < 768 ? MOBILE_CARD_WIDTH : DESKTOP_CARD_WIDTH);
     };
 
     updateMeasurements();
@@ -110,28 +118,32 @@ export default function Blog({ posts }: BlogProps) {
       return;
     }
 
-    x.set(getCenteredX(clampedIndex));
-  }, [currentIndex, totalPosts, getCenteredX, x]);
+    animate(x, getCenteredX(clampedIndex), SPRING_CONFIG);
+  }, [currentIndex, totalPosts, getCenteredX, x, frameWidth]);
 
   const goToIndex = useCallback(
     (index: number) => {
       if (totalPosts === 0) return;
       const clampedIndex = Math.max(0, Math.min(index, totalPosts - 1));
       setCurrentIndex(clampedIndex);
-      animate(x, getCenteredX(clampedIndex), SPRING_CONFIG);
+      animate(x, clampX(getCenteredX(clampedIndex)), SPRING_CONFIG);
     },
-    [getCenteredX, totalPosts, x],
+    [clampX, getCenteredX, totalPosts, x],
   );
 
   const handlePrev = useCallback(() => {
     if (atStart) return;
-    goToIndex(currentIndex - 1);
-  }, [atStart, currentIndex, goToIndex]);
+    const nextIndex = Math.max(0, currentIndex - 1);
+    setCurrentIndex(nextIndex);
+    animate(x, clampX(x.get() + STEP), SPRING_CONFIG);
+  }, [STEP, atStart, clampX, currentIndex, x]);
 
   const handleNext = useCallback(() => {
     if (atEnd) return;
-    goToIndex(currentIndex + 1);
-  }, [atEnd, currentIndex, goToIndex]);
+    const nextIndex = Math.min(totalPosts - 1, currentIndex + 1);
+    setCurrentIndex(nextIndex);
+    animate(x, clampX(x.get() - STEP), SPRING_CONFIG);
+  }, [STEP, atEnd, clampX, currentIndex, totalPosts, x]);
 
   const handlePanEnd = useCallback(
     (_event: unknown, info: { offset: { x: number } }) => {
@@ -148,12 +160,10 @@ export default function Blog({ posts }: BlogProps) {
   return (
     <section id="blogs" className="py-20">
       <Container>
-        <div className="mb-6 flex items-end justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">Featured</p>
-            <h2 className="text-2xl font-bold">Blogs</h2>
-          </div>
-          <p className="text-sm font-medium text-muted-foreground">
+        <div className="mb-8 flex flex-col items-center justify-center gap-1 text-center">
+          <p className="text-sm text-muted-foreground">Featured</p>
+          <h2 className="text-3xl font-bold">Blogs</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             {String(currentIndex + 1).padStart(2, '0')} /{' '}
             {String(totalPosts).padStart(2, '0')}
           </p>
@@ -161,7 +171,7 @@ export default function Blog({ posts }: BlogProps) {
 
         <div
           ref={frameRef}
-          className="relative mx-auto h-[280px] w-full max-w-[616px] overflow-hidden rounded-3xl border border-border bg-card/30 p-6 md:h-[320px] md:max-w-[776px]"
+          className="relative h-[378px] w-full overflow-hidden rounded-2xl border border-border bg-card/30 p-5 md:h-[416px] md:rounded-3xl md:p-8"
         >
           <button
             type="button"
@@ -206,7 +216,7 @@ export default function Blog({ posts }: BlogProps) {
                   <Link
                     key={slug}
                     href={`/blog/${slug}`}
-                    className={`block h-full w-[260px] shrink-0 transition-all duration-500 ease-in-out sm:w-[340px] ${stateClass}`}
+                    className={`block h-full w-[260px] shrink-0 transition-all duration-500 ease-in-out md:w-[340px] ${stateClass}`}
                   >
                     <article className="relative flex h-full flex-col rounded-2xl border border-foreground/20 bg-card p-7 ring-1 ring-border">
                       <span className="absolute right-4 top-3 select-none text-7xl font-bold text-muted-foreground/10">
@@ -248,7 +258,7 @@ export default function Blog({ posts }: BlogProps) {
               return (
                 <div
                   key={slug}
-                  className={`pointer-events-none h-full w-[260px] shrink-0 transition-all duration-500 ease-in-out sm:w-[340px] ${stateClass}`}
+                  className={`pointer-events-none h-full w-[260px] shrink-0 transition-all duration-500 ease-in-out md:w-[340px] ${stateClass}`}
                 >
                   <article className="relative flex h-full flex-col rounded-2xl border border-border bg-card p-6">
                     <span className="absolute right-4 top-3 select-none text-7xl font-bold text-muted-foreground/10">
