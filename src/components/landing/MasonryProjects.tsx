@@ -12,7 +12,7 @@ import {
 } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 type FeedMode = 'homepage' | 'page';
 
@@ -28,6 +28,36 @@ type ProjectCardData = {
 };
 
 type ProjectCardVariant = 'default' | 'reel';
+
+type LenisControl = {
+  start?: () => void;
+  stop?: () => void;
+};
+
+type LenisContainer = {
+  lenis?: LenisControl;
+};
+
+function resolveLenisControl(value: unknown): LenisControl | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const direct = value as LenisControl;
+  if (typeof direct.start === 'function' || typeof direct.stop === 'function') {
+    return direct;
+  }
+
+  const nested = (value as LenisContainer).lenis;
+  if (
+    nested &&
+    (typeof nested.start === 'function' || typeof nested.stop === 'function')
+  ) {
+    return nested;
+  }
+
+  return null;
+}
 
 const CARD_ACCENT = '#4ADE80';
 
@@ -351,6 +381,61 @@ function ProjectCardList({
 }
 
 function ProjectReel({ items }: { items: ProjectCardData[] }) {
+  const reelViewportRef = useRef<HTMLDivElement | null>(null);
+  const lenisControlRef = useRef<LenisControl | null>(null);
+
+  useEffect(() => {
+    type WindowWithLenis = Window & { lenis?: unknown };
+
+    const assignLenisControl = () => {
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      lenisControlRef.current = resolveLenisControl(
+        (window as unknown as WindowWithLenis).lenis,
+      );
+    };
+
+    assignLenisControl();
+
+    if (!lenisControlRef.current) {
+      const timer = window.setTimeout(assignLenisControl, 250);
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (typeof lenisControlRef.current?.stop === 'function') {
+      lenisControlRef.current.stop();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (typeof lenisControlRef.current?.start === 'function') {
+      lenisControlRef.current.start();
+    }
+  };
+
+  const handleWheelCapture = (event: React.WheelEvent<HTMLDivElement>) => {
+    const viewport = reelViewportRef.current;
+    if (!viewport) {
+      return;
+    }
+
+    const { scrollTop, scrollHeight, clientHeight } = viewport;
+    const canScrollUp = scrollTop > 0;
+    const canScrollDown = scrollTop + clientHeight < scrollHeight;
+    const isScrollingUp = event.deltaY < 0;
+    const isScrollingDown = event.deltaY > 0;
+
+    if ((isScrollingUp && canScrollUp) || (isScrollingDown && canScrollDown)) {
+      event.stopPropagation();
+    }
+  };
+
   return (
     <div className="relative mx-auto w-full max-w-3xl">
       <div className="pointer-events-none absolute inset-x-7 top-7 z-20 flex items-center justify-between">
@@ -366,7 +451,16 @@ function ProjectReel({ items }: { items: ProjectCardData[] }) {
         <div className="pointer-events-none absolute inset-x-3 top-3 z-10 h-16 rounded-t-3xl bg-linear-to-b from-background/90 to-transparent" />
         <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 h-20 rounded-b-3xl bg-linear-to-t from-background/95 to-transparent" />
 
-        <div className="scrollbar-hidden relative h-[70vh] min-h-136 max-h-192 snap-y snap-mandatory overflow-y-auto overscroll-y-contain scroll-smooth rounded-[1.55rem] px-1 sm:h-[74vh]">
+        <div
+          ref={reelViewportRef}
+          data-lenis-prevent
+          className="scrollbar-hidden relative h-[70vh] min-h-136 max-h-192 snap-y snap-mandatory overflow-y-auto overscroll-y-contain scroll-smooth rounded-[1.55rem] px-1 touch-pan-y sm:h-[74vh]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleMouseEnter}
+          onTouchEnd={handleMouseLeave}
+          onWheelCapture={handleWheelCapture}
+        >
           {items.map((project) => (
             <div
               key={project.number}
