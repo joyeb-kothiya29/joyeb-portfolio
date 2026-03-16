@@ -1,6 +1,7 @@
 'use client';
 
 import { projects } from '@/config/Projects';
+import GithubIcon from '@/components/svgs/Github';
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
@@ -73,23 +74,39 @@ export function ProjectsVerticalFeed({ mode }: { mode: 'homepage' | 'page' }) {
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      {project.link ? (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 text-[10px] text-white/50 transition-colors hover:text-white/80"
-                        >
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400/70" />
-                          <span>Live Site</span>
-                          <ArrowUpRight className="h-3 w-3" />
-                        </a>
-                      ) : null}
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="flex w-full items-center justify-between">
+                      <div>
+                        {project.link ? (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-[10px] text-white/50 transition-colors hover:text-white/80"
+                          >
+                            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400/70" />
+                            <span>Live Demo</span>
+                            <ArrowUpRight className="h-3 w-3 text-white/50" />
+                          </a>
+                        ) : null}
+                      </div>
+
+                      <div>
+                        {project.github ? (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-[10px] text-white/50 transition-colors hover:text-white/80"
+                          >
+                            <GithubIcon className="h-3.5 w-3.5 text-white/50" />
+                            <span>Source Code</span>
+                          </a>
+                        ) : null}
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="mt-1 flex items-center gap-1.5">
                       {project.technologies?.map((technology, iconIndex) => (
                         <span
                           key={`${project.title}-${technology.name}-${iconIndex}`}
