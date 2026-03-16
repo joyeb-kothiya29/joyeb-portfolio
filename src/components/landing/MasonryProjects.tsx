@@ -34,7 +34,7 @@ export function ProjectsVerticalFeed() {
             return (
               <motion.div
                 key={project.title}
-                className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-[#0D0D0D] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(74,222,128,0.1)]"
+                className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(74,222,128,0.1)] dark:bg-[#0D0D0D]"
                 whileHover={{
                   y: -4,
                 }}
@@ -74,12 +74,12 @@ export function ProjectsVerticalFeed() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-base font-bold text-[#111111] dark:text-white">
                     {project.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="line-clamp-2 text-xs leading-relaxed text-white/50">
+                  <p className="line-clamp-2 text-xs leading-relaxed text-black/60 dark:text-white/50">
                     {project.description}
                   </p>
 
@@ -90,7 +90,7 @@ export function ProjectsVerticalFeed() {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-xs font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black/5 px-3 py-2.5 text-xs font-medium text-black/70 transition-all duration-200 hover:bg-black/10 hover:text-black dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
                       >
                         <ExternalLink className="h-4 w-4" />
                         <span>Live Site</span>
@@ -101,7 +101,7 @@ export function ProjectsVerticalFeed() {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-xs font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black/5 px-3 py-2.5 text-xs font-medium text-black/70 transition-all duration-200 hover:bg-black/10 hover:text-black dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
                       >
                         <Github className="h-4 w-4" />
                         <span>GitHub</span>
@@ -117,7 +117,7 @@ export function ProjectsVerticalFeed() {
         <div className="mt-4 flex justify-center">
           <Link
             href="/projects"
-            className="text-muted-foreground flex items-center gap-1 text-sm transition-colors hover:text-white"
+            className="text-muted-foreground flex items-center gap-1 text-sm transition-colors hover:text-black dark:hover:text-white"
           >
             View All Projects
             <span aria-hidden="true">→</span>

@@ -25,7 +25,7 @@ function ProjectCard({
 }) {
   const category = getCategory(project);
   return (
-    <article className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-[#0D0D0D] transition-all duration-300 hover:shadow-[0_0_30px_rgba(74,222,128,0.1)]">
+    <article className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(74,222,128,0.1)] dark:bg-[#0D0D0D]">
       <div className="absolute top-3 left-3 z-10 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm">
         <span className="font-mono text-xs text-white">
           {String(index + 1).padStart(2, '0')}
@@ -47,9 +47,11 @@ function ProjectCard({
           <span className="text-xs font-medium text-[#4ADE80]">{category}</span>
         </div>
 
-        <h3 className="text-base font-bold text-white">{project.title}</h3>
+        <h3 className="text-base font-bold text-[#111111] dark:text-white">
+          {project.title}
+        </h3>
 
-        <p className="line-clamp-2 text-xs leading-relaxed text-white/50">
+        <p className="line-clamp-2 text-xs leading-relaxed text-black/60 dark:text-white/50">
           {project.description}
         </p>
 
@@ -59,7 +61,7 @@ function ProjectCard({
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-xs font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black/5 px-3 py-2.5 text-xs font-medium text-black/70 transition-all duration-200 hover:bg-black/10 hover:text-black dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
             >
               <ExternalLink className="h-4 w-4" />
               <span>Live Site</span>
@@ -71,7 +73,7 @@ function ProjectCard({
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-xs font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black/5 px-3 py-2.5 text-xs font-medium text-black/70 transition-all duration-200 hover:bg-black/10 hover:text-black dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
             >
               <Github className="h-4 w-4" />
               <span>GitHub</span>
