@@ -279,3 +279,26 @@ html {
 .prose h4 {
   font-size: calc(var(--blog-font-size) * 1.25);
 }
+
+/* Infinite-scroll column animations for projects page */
+@keyframes scroll-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.col-scroll-up {
+  animation: scroll-up 22s linear infinite;
+}
+
+.col-scroll-down {
+  animation: scroll-up 22s linear infinite reverse;
+}
+
+.scroll-col:hover .col-scroll-up,
+.scroll-col:hover .col-scroll-down {
+  animation-play-state: paused;
+}
