@@ -2,6 +2,7 @@
 
 import Container from '@/components/common/Container';
 import GithubIcon from '@/components/svgs/Github';
+import { GITHUB_PROFILE_URL, GITHUB_USERNAME } from '@/config/Github';
 import { Flame } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
@@ -374,13 +375,13 @@ export default function Github() {
             </span>
           </div>
           <Link
-            href="https://github.com/joyeb-kothiya29"
+            href={GITHUB_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 inline-flex min-h-11 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <GithubIcon className="h-3.5 w-3.5" />
-            @joyeb-kothiya29
+            @{GITHUB_USERNAME}
           </Link>
         </div>
 

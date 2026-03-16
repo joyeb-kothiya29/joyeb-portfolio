@@ -1,3 +1,5 @@
+import { githubConfig, GITHUB_USERNAME } from '@/config/Github';
+
 type ContributionLevel = 0 | 1 | 2 | 3 | 4;
 
 type ContributionDay = {
@@ -19,9 +21,9 @@ type DenoContribution = {
   level?: number;
 };
 
-const PRIMARY_URL = 'https://github-contributions-api.deno.dev/joyeb-kothiya29';
+const PRIMARY_URL = `${githubConfig.apiUrl}/${GITHUB_USERNAME}`;
 const FALLBACK_URL =
-  'https://github.com/users/joyeb-kothiya29/contributions';
+  `https://github.com/users/${GITHUB_USERNAME}/contributions`;
 const FETCH_TIMEOUT_MS = 3500;
 const GRID_CELL_COUNT = 52 * 7;
 

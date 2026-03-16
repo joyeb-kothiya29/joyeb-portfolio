@@ -1,4 +1,5 @@
 import { about } from './About';
+import { GITHUB_USERNAME } from './Github';
 import { heroConfig } from './Hero';
 
 export interface PageMeta {
@@ -41,7 +42,7 @@ export const siteConfig = {
   author: {
     name: about.name,
     twitter: '@joyebdev',
-    github: 'joyeb-kothiya29',
+    github: GITHUB_USERNAME,
     linkedin: 'joyeb-kothiya-197b783b6',
     email: 'joyebkofficial@gmail.com',
   },

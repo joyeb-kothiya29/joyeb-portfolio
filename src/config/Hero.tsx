@@ -28,6 +28,7 @@ import Instagram from '@/components/svgs/Instagram';
 import LinkedIn from '@/components/svgs/LinkedIn';
 import Mail from '@/components/svgs/Mail';
 import X from '@/components/svgs/X';
+import { GITHUB_PROFILE_URL } from '@/config/Github';
 import Bun from '@/components/technologies/Bun';
 import JavaScript from '@/components/technologies/JavaScript';
 import MongoDB from '@/components/technologies/MongoDB';
@@ -108,7 +109,7 @@ export const heroConfig = {
 export const socialLinks = [
   {
     name: 'Github',
-    href: 'https://github.com/joyeb-kothiya29',
+    href: GITHUB_PROFILE_URL,
     icon: <Github className="h-[22px] w-[22px]" />,
   },
   {

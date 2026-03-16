@@ -5,13 +5,20 @@
  * Update the username to match your GitHub profile.
  */
 
+export const GITHUB_USERNAME = 'joyebdev';
+export const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
+
+export function getGithubRepoUrl(repository: string): string {
+  return `${GITHUB_PROFILE_URL}/${repository}.git`;
+}
+
 export const githubConfig = {
-  username: 'joyeb-kothiya29',
+  username: GITHUB_USERNAME,
   apiUrl: 'https://github-contributions-api.deno.dev',
 
   // Display settings
   title: 'GitHub Activity',
-  subtitle: "joyeb-kothiya29's coding journey over the past year",
+  subtitle: `${GITHUB_USERNAME}'s coding journey over the past year`,
 
   // Chart settings
   blockSize: 11,
