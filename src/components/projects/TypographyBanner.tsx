@@ -3,7 +3,7 @@ import React from 'react';
 
 interface TypographyBannerProps {
   title: string;
-  theme?: 'green' | 'gold' | 'red' | 'purple';
+  theme?: 'green' | 'blue' | 'purple' | 'orange' | 'neutral';
   className?: string;
 }
 
